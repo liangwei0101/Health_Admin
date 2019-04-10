@@ -1,8 +1,17 @@
 package com.liangwei.demo.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 用户实体的类
  */
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class User {
 
     private int no;
@@ -11,27 +20,4 @@ public class User {
 
     private String email;
 
-    public int getNo() {
-        return no;
-    }
-
-    public void setNo(int no) {
-        this.no = no;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

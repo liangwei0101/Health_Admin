@@ -1,5 +1,14 @@
 package com.liangwei.demo.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class Book {
 
     private int id;
@@ -7,28 +16,4 @@ public class Book {
     private String name;
 
     private float price;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
 }

@@ -25,25 +25,25 @@ public class BookController {
     @ApiOperation("查询书本的信息")
     @RequestMapping(value ="/book", method = RequestMethod.GET)
     public List<Book> BookQry() {
-        return bookService.getBook();
+        return bookService.list();
     }
 
-    @ApiOperation("增加书本信息")
-    @RequestMapping(value ="/book", method = RequestMethod.POST)
-    public void BookAdd(Book book){
-        bookService.addBook(book);
-    }
-
-    @ApiOperation("修改书本信息")
-    @RequestMapping(value ="/book", method = RequestMethod.PUT)
-    public void BookUpdate(Book book){
-        bookService.updateBookById(book);
-    }
-
-    @ApiOperation("删除书本信息")
-    @ApiImplicitParam(name = "id", value = "书本编号", required = true, dataType = "Integer")
-    @RequestMapping(value ="/book", method = RequestMethod.DELETE)
-    public void BookDel(@RequestParam(value="id") int id){
-        bookService.delBookById(id);
-    }
+//    @ApiOperation("增加书本信息")
+//    @RequestMapping(value ="/book", method = RequestMethod.POST)
+//    public void BookAdd(Book book){
+//        bookService.addBook(book);
+//    }
+//
+//    @ApiOperation("修改书本信息")
+//    @RequestMapping(value ="/book", method = RequestMethod.PUT)
+//    public void BookUpdate(Book book){
+//        bookService.updateBookById(book);
+//    }
+//
+//    @ApiOperation("删除书本信息")
+//    @ApiImplicitParam(name = "id", value = "书本编号", required = true, dataType = "Integer")
+//    @RequestMapping(value ="/book", method = RequestMethod.DELETE)
+//    public void BookDel(@RequestParam(value="id") int id){
+//        bookService.delBookById(id);
+//    }
 }
