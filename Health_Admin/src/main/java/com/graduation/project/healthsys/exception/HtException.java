@@ -8,6 +8,7 @@
  */
 package com.graduation.project.healthsys.exception;
 
+import com.graduation.project.healthsys.enums.Resultenum;
 import lombok.Data;
 
 /**
@@ -33,5 +34,15 @@ public class HtException extends RuntimeException {
   public HtException (String msg) {
     super(msg);
     this.code = 101;
+  }
+
+  public HtException (Resultenum resultenum) {
+    super(resultenum.getMsg());
+    this.code = resultenum.getCode();
+  }
+
+  public HtException (Resultenum resultenum, String msg) {
+    super(msg);
+    this.code = resultenum.getCode();
   }
 }

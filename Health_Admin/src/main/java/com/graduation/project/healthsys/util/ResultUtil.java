@@ -32,4 +32,19 @@ public class ResultUtil {
     result.put("msg", msg);
     return result;
   }
+
+  public static Map<String, Object> success() {
+    Map<String, Object> result = new HashMap<>();
+    result.put("code", 200);
+    result.put("msg", "操作成功");
+    return result;
+  }
+
+  public static Map<String, Object> success(Object obj) {
+    Map<String, Object> result = new HashMap<>();
+    result.put("code", 200);
+    result.put("msg", "操作成功");
+    result.put("data", obj);
+    return result;
+  }
 }

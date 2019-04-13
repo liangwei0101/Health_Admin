@@ -8,9 +8,25 @@
  */
 package com.graduation.project.healthsys.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.graduation.project.healthsys.bean.Branch;
+import com.graduation.project.healthsys.enums.Resultenum;
+import com.graduation.project.healthsys.exception.HtException;
+import com.graduation.project.healthsys.service.IBranchService;
+import com.graduation.project.healthsys.util.ParamsUtils;
+import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 功能说明: 前端控制器
@@ -22,5 +38,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/branch")
 public class BranchController {
-	
+
+  @Autowired
+  private IBranchService branchService;
+
+  @PostMapping("/add")
+  public Object add(@RequestBody Branch branch) {
+    branch.setBranchNo(IdWorker.getIdStr());
+    branchService.save(branch);
+    return ResultUtil.success();
+  }
+
+  @PostMapping("/update")
+  public Object update(@RequestBody Branch branch) {
+    if (Objects.isNull(branch.getBranchNo()) || Objects.equals("", branch)) {
+      throw new HtException(Resultenum.MISSING_PARAM, "请选择分院");
+    }
+
+    Branch dbBranch = branchService.getById(branch.getBranchNo());
+
+    if (Objects.isNull(dbBranch)) {
+      throw new HtException(Resultenum.DATA_NOT_EXIST);
+    }
+    branchService.updateById(branch);
+
+    return ResultUtil.success();
+  }
+
+  @PostMapping("/pageList")
+  public Object pageList(@RequestBody Map<String, Object> param){
+
+    String currentStr = ParamsUtils.stringParam(param, "current");
+
+    Integer current = Integer.parseInt(currentStr);
+
+    IPage<Branch> page = new Page<>(current, 20);
+
+    page = branchService.page(page);
+
+    return ResultUtil.success(page);
+  }
 }
