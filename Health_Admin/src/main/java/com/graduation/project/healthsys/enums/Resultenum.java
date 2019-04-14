@@ -16,7 +16,9 @@ public enum Resultenum {
 
   ERROR(101, "服务错误"),
   MISSING_PARAM(102, "缺少必要参数"),
-  DATA_NOT_EXIST(103, "数据不存在")
+  DATA_NOT_EXIST(103, "数据不存在"),
+  NO_USER(104, "用户信息不存在"),
+  PWD_ERROR(105, "密码错误")
   ;
   Integer code;
   String msg;
