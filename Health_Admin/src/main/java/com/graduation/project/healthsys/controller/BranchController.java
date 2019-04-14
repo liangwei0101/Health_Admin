@@ -42,18 +42,18 @@ public class BranchController {
 
   @RequestMapping(value ="/branch", method = RequestMethod.GET)
   public Object get() {
-    return ResultUtil.success(branchService.listMaps());
+    return ResultUtil.success(branchService.list());
   }
 
   @RequestMapping(value ="/branch", method = RequestMethod.POST)
-  public Object add(@RequestBody Branch branch) {
+  public Object add(Branch branch) {
     branch.setBranchNo(IdWorker.getIdStr());
     branchService.save(branch);
     return ResultUtil.success();
   }
 
   @RequestMapping(value ="/branch", method = RequestMethod.PUT)
-  public Object update(@RequestBody Branch branch) {
+  public Object update(Branch branch) {
     if (Objects.isNull(branch.getBranchNo()) || Objects.equals("", branch)) {
       throw new HtException(Resultenum.MISSING_PARAM, "请选择分院");
     }
@@ -69,7 +69,7 @@ public class BranchController {
   }
 
   @PostMapping("/pageList")
-  public Object pageList(@RequestBody Map<String, Object> param){
+  public Object pageList(Map<String, Object> param){
 
     String currentStr = ParamsUtils.stringParam(param, "current");
 
