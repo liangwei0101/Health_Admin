@@ -20,11 +20,9 @@ import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,20 +34,25 @@ import java.util.Objects;
  */
 @Slf4j
 @RestController
-@RequestMapping("/branch")
+@RequestMapping("/api")
 public class BranchController {
 
   @Autowired
   private IBranchService branchService;
 
-  @PostMapping("/add")
+  @RequestMapping(value ="/branch", method = RequestMethod.GET)
+  public Object get() {
+    return ResultUtil.success(branchService.listMaps());
+  }
+
+  @RequestMapping(value ="/branch", method = RequestMethod.POST)
   public Object add(@RequestBody Branch branch) {
     branch.setBranchNo(IdWorker.getIdStr());
     branchService.save(branch);
     return ResultUtil.success();
   }
 
-  @PostMapping("/update")
+  @RequestMapping(value ="/branch", method = RequestMethod.PUT)
   public Object update(@RequestBody Branch branch) {
     if (Objects.isNull(branch.getBranchNo()) || Objects.equals("", branch)) {
       throw new HtException(Resultenum.MISSING_PARAM, "请选择分院");
