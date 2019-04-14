@@ -1,94 +1,146 @@
 <template>
   <div class="app-container">
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="branch_no" label="编号" width="100" />
-      <el-table-column prop="branch_no" label="分院名称" width="320" />
-      <el-table-column prop="branch_no" label="分院地址" width="610" />
-      <el-table-column label="操作">
+
+    <el-row :gutter="20">
+      <el-col :span="6" :offset="21">
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          @click="handleCreate"
+        >
+          增加
+        </el-button>
+      </el-col>
+    </el-row>
+
+    <el-table :data="tableData" style="width: 100%;margin-top: 15px;">
+      <el-table-column prop="branch_no" label="编号" width="150" />
+      <el-table-column prop="name" label="分院名称" width="250" />
+      <el-table-column prop="address" label="分院地址" />
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
-        style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.type')" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name"
-              :value="item.key" />
-          </el-select>
+    <el-dialog title="增加" :visible.sync="dialogFormVisible">
+      <el-form
+        ref="numberValidateForm"
+        :model="numberValidateForm"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item
+          label="编号"
+          prop="branch_no"
+          :rules="[{ required: true, message: '编号不能为空' },{ type: 'number', message: '编号必须为数字值' }]"
+        >
+          <el-col>
+            <el-input
+              v-model.number="numberValidateForm.branch_no"
+              type="branch_no"
+              autocomplete="off"
+            />
+          </el-col>
         </el-form-item>
-        <el-form-item :label="$t('table.date')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        <el-form-item
+          label="分院名称"
+          prop="name"
+          :rules="[{ required: true, message: '分院名称不能为空' }]"
+        >
+          <el-col>
+            <el-input
+              v-model.number="numberValidateForm.name"
+              type="name"
+              autocomplete="off"
+            />
+          </el-col>
         </el-form-item>
-        <el-form-item :label="$t('table.title')" prop="title">
-          <el-input v-model="temp.title" />
+        <el-form-item
+          label="分院地址"
+          prop="address"
+          :rules="[{ required: true, message: '分院地址不能为空' }]"
+        >
+          <el-col>
+            <el-input
+              v-model.number="numberValidateForm.address"
+              type="address"
+              autocomplete="off"
+            />
+          </el-col>
         </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3"
-            style="margin-top:8px;" />
-        </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"
-            placeholder="Please input" />
+
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
+          <el-button @click="resetForm('numberValidateForm')">重置</el-button>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          {{ $t('table.cancel') }}
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          {{ $t('table.confirm') }}
-        </el-button>
-      </div>
-    </el-dialog> -->
-
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { getBranch, addBranch } from '@/api/branch'
 export default {
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      },
-      {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      },
-      {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      },
-      {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
+      tableData: [],
+      dialogFormVisible: false,
+      numberValidateForm: {
+        branch_no: '',
+        name: '',
+        address: ''
       }
-      ]
     }
   },
+  mounted() {
+    this.branchQryAction()
+  },
   methods: {
+    branchQryAction() {
+      getBranch().then(res => {
+        console.log(res)
+        this.tableData = res.data
+        console.log(this.tableData)
+      })
+    },
     handleEdit(index, row) {
       console.log(index, row)
     },
     handleDelete(index, row) {
       console.log(index, row)
+    },
+    handleCreate() {
+      this.dialogFormVisible = true
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          const temp = { 'branch_no': this.numberValidateForm.branch_no.toString(),
+            'name': this.numberValidateForm.name,
+            'address': this.numberValidateForm.address
+          }
+          console.log(temp)
+          addBranch(temp).then(res => {
+            console.log()
+            alert('submit!')
+            this.dialogFormVisible = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
-
 </script>
