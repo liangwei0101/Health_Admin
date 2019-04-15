@@ -25,28 +25,28 @@ public class AuthenticationController {
     private IUserService userService;
     @RequestMapping(value ="/login", method = RequestMethod.POST)
     public Object login(Map<String, Object> param) {
-        String phone = ParamsUtils.stringParam(param, "phone");
-        String password = ParamsUtils.stringParam(param, "password");
-        if (Objects.isNull(phone) || Objects.equals("", phone)) {
-            throw new HtException(Resultenum.MISSING_PARAM, "请输入登录名");
-        }
-
-        if (Objects.isNull(password) || Objects.equals("", phone)) {
-            throw new HtException(Resultenum.MISSING_PARAM, "请输入密码");
-        }
-        String pwd = Md5Util.create32Md5(password);
-        User user = userService.getOne(new QueryWrapper<User>().eq("phone", phone));
-        if (Objects.isNull(user)) {
-            throw new HtException(Resultenum.NO_USER);
-        }
-        if (!Objects.equals(pwd, user.getPwd())) {
-            throw new HtException(Resultenum.PWD_ERROR);
-        }
+//        String phone = ParamsUtils.stringParam(param, "phone");
+//        String password = ParamsUtils.stringParam(param, "password");
+//        if (Objects.isNull(phone) || Objects.equals("", phone)) {
+//            throw new HtException(Resultenum.MISSING_PARAM, "请输入登录名");
+//        }
+//
+//        if (Objects.isNull(password) || Objects.equals("", phone)) {
+//            throw new HtException(Resultenum.MISSING_PARAM, "请输入密码");
+//        }
+//        String pwd = Md5Util.create32Md5(password);
+//        User user = userService.getOne(new QueryWrapper<User>().eq("phone", phone));
+//        if (Objects.isNull(user)) {
+//            throw new HtException(Resultenum.NO_USER);
+//        }
+//        if (!Objects.equals(pwd, user.getPwd())) {
+//            throw new HtException(Resultenum.PWD_ERROR);
+//        }
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> data = new HashMap<String, Object>();
         resultMap.put("code",200);
         data.put("token","admin-token");
-        data.put("user", user);
+//        data.put("user", user);
         resultMap.put("data",data);
         return resultMap;
     }

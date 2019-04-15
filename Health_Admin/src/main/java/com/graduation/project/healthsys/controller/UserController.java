@@ -12,12 +12,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.graduation.project.healthsys.bean.User;
 import com.graduation.project.healthsys.exception.HtException;
 import com.graduation.project.healthsys.service.IUserService;
+import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -29,11 +27,34 @@ import java.util.Objects;
  */
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api")
 public class UserController {
 
   @Autowired
   private IUserService userService;
+
+  @RequestMapping(value ="/user", method = RequestMethod.GET)
+  public Object getUser(){
+    return ResultUtil.success(userService.list());
+  }
+
+  @RequestMapping(value ="/user", method = RequestMethod.POST)
+  public Object add(User user){
+    userService.save(user);
+    return ResultUtil.success();
+  }
+
+  @RequestMapping(value ="/user", method = RequestMethod.PUT)
+  public Object update(User user){
+    userService.updateById(user);
+    return ResultUtil.success();
+  }
+
+  @RequestMapping(value ="/user", method = RequestMethod.DELETE)
+  public Object delete(User user){
+    userService.removeById(user);
+    return ResultUtil.success();
+  }
 
   @GetMapping("/login")
   public Object login(@RequestParam("phone") String phone, @RequestParam(name="password", required = false) String password) {
@@ -47,5 +68,4 @@ public class UserController {
 
     return null;
   }
-	
 }
