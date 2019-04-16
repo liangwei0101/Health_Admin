@@ -49,7 +49,7 @@ private static final long serialVersionUID=1L;
   /**
    * 用户类型
    */
-  private Integer userType;
+  private String userType;
   /**
    * 
    */
