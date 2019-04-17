@@ -41,9 +41,15 @@ private static final long serialVersionUID=1L;
    */
   private String idCard;
   /**
+   *
+   */
+  private String subscribeId;
+  /**
    * 
    */
-  private String type;
+  private String mealId;
+
+  private String projectId;
   /**
    * 
    */
@@ -52,10 +58,7 @@ private static final long serialVersionUID=1L;
    * 
    */
   private String result;
-  /**
-   * 
-   */
-  private String subscribeId;
 
+  private String remark;
 
 }
