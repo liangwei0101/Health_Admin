@@ -7,6 +7,7 @@ import com.graduation.project.healthsys.service.IProjectService;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,11 @@ public class ProjectController {
     @RequestMapping(value ="/project", method = RequestMethod.GET)
     public Object get() {
         return ResultUtil.success(projectService.list());
+    }
+
+    @RequestMapping(value ="/project/{id}", method = RequestMethod.GET)
+    public Object getById(@PathVariable("id") String id) {
+        return ResultUtil.success(projectService.getById(id));
     }
 
     @RequestMapping(value ="/project", method = RequestMethod.POST)

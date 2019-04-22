@@ -23,6 +23,7 @@ import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
@@ -42,112 +43,121 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/meal")
+@RequestMapping("/api")
 public class MealController {
+
   @Autowired
   private IMealService mealService;
-  @Autowired
-  private IMealProjectService mealProjectService;
-  @Autowired
-  private IProjectService projectService;
 
-  @RequestMapping(value = "/add")
-  public Object add(Map<String, Object> param) {
-    String name = ParamsUtils.stringParam(param, "name");
-
-    double money = Double.parseDouble(ParamsUtils.stringParam(param,"money"));
-
-    List<String> projectIds = (List<String>) param.get("projectIds");
-
-    Meal meal = Meal.builder()
-        .id(IdWorker.getIdStr())
-        .name(name)
-        .money(money)
-        .build();
-
-    mealService.save(meal);
-
-    if (Objects.isNull(projectIds) || projectIds.isEmpty()) {
-      throw new HtException(Resultenum.MISSING_PARAM, "请选择项目");
-    }
-    List<MealProject> mealProjects = new LinkedList<>();
-    projectIds.stream().forEach(e -> mealProjects.add(MealProject.builder()
-        .id(IdWorker.getIdStr())
-        .mealId(meal.getId())
-        .projectId(e)
-        .build()));
-
-    if (!mealProjects.isEmpty()) {
-      mealProjectService.saveBatch(mealProjects);
-    }
-    return ResultUtil.success();
-  }
-
-
-  @RequestMapping(value = "/update")
-  public Object update(Map<String, Object> param) {
-
-    String id =  ParamsUtils.stringParam(param, "id");
-
-    String name = ParamsUtils.stringParam(param, "name");
-
-    double money = Double.parseDouble(ParamsUtils.stringParam(param,"money"));
-
-    List<String> projectIds = (List<String>) param.get("projectIds");
-
-    Meal meal = Meal.builder()
-        .id(id)
-        .name(name)
-        .money(money)
-        .build();
-
-    if (!mealService.updateById(meal)) {
-      throw new HtException("修改失败");
-    }
-
-    if (Objects.isNull(projectIds) || projectIds.isEmpty()) {
-      throw new HtException(Resultenum.MISSING_PARAM, "请选择项目");
-    }
-
-    mealProjectService.remove(new QueryWrapper<MealProject>().eq("meal_id", id));
-
-    List<MealProject> mealProjects = new LinkedList<>();
-    projectIds.stream().forEach(e -> mealProjects.add(MealProject.builder()
-        .id(IdWorker.getIdStr())
-        .mealId(meal.getId())
-        .projectId(e)
-        .build()));
-
-    if (!mealProjects.isEmpty()) {
-      mealProjectService.saveBatch(mealProjects);
-    }
-    return ResultUtil.success();
-  }
-
-  @RequestMapping(value = "/list")
+  @RequestMapping(value = "/meal",method = RequestMethod.GET)
   public Object list() {
-    return ResultUtil.success(mealProjectService.list());
+    return ResultUtil.success(mealService.list());
   }
 
-  @RequestMapping(value = "detail")
-  public Object detail(Map<String, Object> param) {
-    String id = ParamsUtils.stringParam(param, "id");
 
-    Meal meal = mealService.getById(id);
-
-    List<MealProject> mealProjects = mealProjectService.list(new QueryWrapper<MealProject>().eq("meal_id", id));
-
-    Set<String> set = mealProjects.stream().map(e->e.getProjectId()).collect(Collectors.toSet());
-
-    Collection<Project> projects = projectService.listByIds(set);
-
-    Map<String, Object> result = new HashMap<>();
-
-    result.put("projects", projects);
-
-    result.put("meal", meal);
-
-    return ResultUtil.success(result);
-  }
+//  @Autowired
+//  private IMealProjectService mealProjectService;
+//  @Autowired
+//  private IProjectService projectService;
+//
+//  @RequestMapping(value = "/add")
+//  public Object add(Map<String, Object> param) {
+//    String name = ParamsUtils.stringParam(param, "name");
+//
+//    double money = Double.parseDouble(ParamsUtils.stringParam(param,"money"));
+//
+//    List<String> projectIds = (List<String>) param.get("projectIds");
+//
+//    Meal meal = Meal.builder()
+//        .id(IdWorker.getIdStr())
+//        .name(name)
+//        .money(money)
+//        .build();
+//
+//    mealService.save(meal);
+//
+//    if (Objects.isNull(projectIds) || projectIds.isEmpty()) {
+//      throw new HtException(Resultenum.MISSING_PARAM, "请选择项目");
+//    }
+//    List<MealProject> mealProjects = new LinkedList<>();
+//    projectIds.stream().forEach(e -> mealProjects.add(MealProject.builder()
+//        .id(IdWorker.getIdStr())
+//        .mealId(meal.getId())
+//        .projectId(e)
+//        .build()));
+//
+//    if (!mealProjects.isEmpty()) {
+//      mealProjectService.saveBatch(mealProjects);
+//    }
+//    return ResultUtil.success();
+//  }
+//
+//
+//  @RequestMapping(value = "/update")
+//  public Object update(Map<String, Object> param) {
+//
+//    String id =  ParamsUtils.stringParam(param, "id");
+//
+//    String name = ParamsUtils.stringParam(param, "name");
+//
+//    double money = Double.parseDouble(ParamsUtils.stringParam(param,"money"));
+//
+//    List<String> projectIds = (List<String>) param.get("projectIds");
+//
+//    Meal meal = Meal.builder()
+//        .id(id)
+//        .name(name)
+//        .money(money)
+//        .build();
+//
+//    if (!mealService.updateById(meal)) {
+//      throw new HtException("修改失败");
+//    }
+//
+//    if (Objects.isNull(projectIds) || projectIds.isEmpty()) {
+//      throw new HtException(Resultenum.MISSING_PARAM, "请选择项目");
+//    }
+//
+//    mealProjectService.remove(new QueryWrapper<MealProject>().eq("meal_id", id));
+//
+//    List<MealProject> mealProjects = new LinkedList<>();
+//    projectIds.stream().forEach(e -> mealProjects.add(MealProject.builder()
+//        .id(IdWorker.getIdStr())
+//        .mealId(meal.getId())
+//        .projectId(e)
+//        .build()));
+//
+//    if (!mealProjects.isEmpty()) {
+//      mealProjectService.saveBatch(mealProjects);
+//    }
+//    return ResultUtil.success();
+//  }
+//
+//  @RequestMapping(value = "/meal",method = RequestMethod.GET)
+//  public Object list() {
+//    Object aa = mealProjectService.list();
+//    return ResultUtil.success(mealProjectService.list());
+//  }
+//
+//  @RequestMapping(value = "detail")
+//  public Object detail(Map<String, Object> param) {
+//    String id = ParamsUtils.stringParam(param, "id");
+//
+//    Meal meal = mealService.getById(id);
+//
+//    List<MealProject> mealProjects = mealProjectService.list(new QueryWrapper<MealProject>().eq("meal_id", id));
+//
+//    Set<String> set = mealProjects.stream().map(e->e.getProjectId()).collect(Collectors.toSet());
+//
+//    Collection<Project> projects = projectService.listByIds(set);
+//
+//    Map<String, Object> result = new HashMap<>();
+//
+//    result.put("projects", projects);
+//
+//    result.put("meal", meal);
+//
+//    return ResultUtil.success(result);
+//  }
 
 }
