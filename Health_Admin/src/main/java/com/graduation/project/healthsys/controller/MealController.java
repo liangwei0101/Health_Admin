@@ -46,14 +46,32 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class MealController {
 
-  @Autowired
-  private IMealService mealService;
+    @Autowired
+    private IMealService mealService;
 
-  @RequestMapping(value = "/meal",method = RequestMethod.GET)
-  public Object list() {
-    return ResultUtil.success(mealService.list());
-  }
+    @RequestMapping(value = "/meal", method = RequestMethod.GET)
+    public Object list() {
+        return ResultUtil.success(mealService.list());
+    }
 
+    @RequestMapping(value = "/meal", method = RequestMethod.POST)
+    public Object add(Meal meal) {
+        meal.setId(IdWorker.getIdStr());
+        mealService.save(meal);
+        return ResultUtil.success();
+    }
+
+    @RequestMapping(value = "/meal", method = RequestMethod.PUT)
+    public Object update(Meal meal) {
+        mealService.updateById(meal);
+        return ResultUtil.success();
+    }
+
+    @RequestMapping(value = "/meal", method = RequestMethod.DELETE)
+    public Object delete(Meal meal) {
+        mealService.removeById(meal);
+        return ResultUtil.success();
+    }
 
 //  @Autowired
 //  private IMealProjectService mealProjectService;

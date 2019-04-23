@@ -11,6 +11,8 @@ package com.graduation.project.healthsys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.graduation.project.healthsys.bean.MealProject;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 功能说明:
@@ -19,5 +21,15 @@ import com.graduation.project.healthsys.bean.MealProject;
  * 功能描述: <br>
  */
 public interface MealProjectDao extends BaseMapper<MealProject> {
+
+    /**
+     *  @Param 是参数的别名，在sql中可以动态获取的。
+     *
+     * @param mealId
+     * @return
+     */
+
+    @Select("DELETE FROM meal_project WHERE meal_id = #{mealId}")
+    Boolean Delete (@Param("mealId")String mealId);
 
 }

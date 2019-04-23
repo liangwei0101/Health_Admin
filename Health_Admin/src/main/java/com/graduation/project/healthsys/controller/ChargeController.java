@@ -35,7 +35,6 @@ public class ChargeController {
 
     @RequestMapping(value ="/charge", method = RequestMethod.GET)
     public Object get() {
-        Object aa = chargeService.list();
         return ResultUtil.success(chargeService.list());
     }
 
