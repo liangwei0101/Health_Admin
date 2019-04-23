@@ -30,6 +30,5 @@ public interface MealProjectDao extends BaseMapper<MealProject> {
      */
 
     @Select("DELETE FROM meal_project WHERE meal_id = #{mealId}")
-    Boolean Delete (@Param("mealId")String mealId);
-
+    Boolean DeleteByMealId (@Param("mealId")String mealId);
 }

@@ -58,7 +58,7 @@ public class MealController {
     public Object add(Meal meal) {
         meal.setId(IdWorker.getIdStr());
         mealService.save(meal);
-        return ResultUtil.success();
+        return ResultUtil.success(meal);
     }
 
     @RequestMapping(value = "/meal", method = RequestMethod.PUT)

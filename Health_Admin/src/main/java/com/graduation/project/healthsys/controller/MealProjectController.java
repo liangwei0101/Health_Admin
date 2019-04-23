@@ -1,15 +1,14 @@
 package com.graduation.project.healthsys.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.graduation.project.healthsys.bean.MealProject;
 import com.graduation.project.healthsys.bean.User;
+import com.graduation.project.healthsys.mapper.MealProjectDao;
 import com.graduation.project.healthsys.service.IMealProjectService;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +17,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class MealProjectController {
+
+    @Autowired
+    private MealProjectDao mealProjectDao;
 
     @Autowired
     private IMealProjectService mealProjectService;
@@ -35,20 +37,25 @@ public class MealProjectController {
     }
 
     @RequestMapping(value ="/mealProject", method = RequestMethod.POST)
-    public Object add(List<MealProject> mealProjectList){
+    public Object add(@RequestBody List<MealProject> mealProjectList){
+        for (MealProject item: mealProjectList) {
+            item.setId(IdWorker.getIdStr());
+        }
         mealProjectService.saveBatch(mealProjectList);
         return ResultUtil.success();
     }
 
     @RequestMapping(value ="/mealProject", method = RequestMethod.PUT)
     public Object update(List<MealProject> mealProjectList){
-        mealProjectService.updateBatchById(mealProjectList);
+        MealProject mealProject = mealProjectList.get(0);
+        mealProjectDao.DeleteByMealId(mealProject.getMealId());
+        mealProjectService.saveBatch(mealProjectList);
         return ResultUtil.success();
     }
 
     @RequestMapping(value ="/mealProject", method = RequestMethod.DELETE)
     public Object delete(MealProject mealProject){
-        mealProjectService.removeById(mealProject);
+        mealProjectDao.DeleteByMealId(mealProject.getMealId());
         return ResultUtil.success();
     }
 }
