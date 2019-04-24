@@ -8,6 +8,7 @@ import com.graduation.project.healthsys.service.IMealProjectService;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,8 +37,9 @@ public class MealProjectController {
         return ResultUtil.success(projectList);
     }
 
-    @RequestMapping(value ="/mealProject", method = RequestMethod.POST)
+    @RequestMapping(value ="/mealProject", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public Object add(@RequestBody List<MealProject> mealProjectList){
+
         for (MealProject item: mealProjectList) {
             item.setId(IdWorker.getIdStr());
         }
