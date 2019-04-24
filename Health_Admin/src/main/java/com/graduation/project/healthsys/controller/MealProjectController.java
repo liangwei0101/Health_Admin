@@ -33,7 +33,7 @@ public class MealProjectController {
     @RequestMapping(value ="/mealProject/{meal_id}", method = RequestMethod.GET)
     public Object getUser(@PathVariable("meal_id") String meal_id){
         List<MealProject> mealProjectList = mealProjectService.list();
-        List<MealProject> projectList = mealProjectList.stream().filter((MealProject mealProject) -> mealProject.getMealId() == meal_id).collect(Collectors.toList());
+        List<MealProject> projectList = mealProjectList.stream().filter((MealProject m) -> m.getMealId().equals(meal_id)).collect(Collectors.toList());
         return ResultUtil.success(projectList);
     }
 
