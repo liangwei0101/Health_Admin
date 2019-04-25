@@ -22,6 +22,7 @@ import com.graduation.project.healthsys.util.ParamsUtils;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,20 +56,20 @@ public class MealController {
     }
 
     @RequestMapping(value = "/meal", method = RequestMethod.POST)
-    public Object add(Meal meal) {
+    public Object add(@RequestBody Meal meal) {
         meal.setId(IdWorker.getIdStr());
         mealService.save(meal);
         return ResultUtil.success(meal);
     }
 
     @RequestMapping(value = "/meal", method = RequestMethod.PUT)
-    public Object update(Meal meal) {
+    public Object update(@RequestBody Meal meal) {
         mealService.updateById(meal);
         return ResultUtil.success();
     }
 
     @RequestMapping(value = "/meal", method = RequestMethod.DELETE)
-    public Object delete(Meal meal) {
+    public Object delete(@RequestBody Meal meal) {
         mealService.removeById(meal);
         return ResultUtil.success();
     }
