@@ -46,7 +46,7 @@ public class BranchController {
   }
 
   @RequestMapping(value ="/branch", method = RequestMethod.POST)
-  public Object add(Branch branch) {
+  public Object add(@RequestBody Branch branch) {
     branch.setBranchNo(IdWorker.getIdStr());
     branchService.save(branch);
     return ResultUtil.success();
