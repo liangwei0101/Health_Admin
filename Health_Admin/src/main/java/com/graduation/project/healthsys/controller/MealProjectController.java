@@ -61,14 +61,6 @@ public class MealProjectController {
         return ResultUtil.success();
     }
 
-    @RequestMapping(value ="/mealProject", method = RequestMethod.PUT)
-    public Object update(List<MealProject> mealProjectList){
-        MealProject mealProject = mealProjectList.get(0);
-        mealProjectDao.DeleteByMealId(mealProject.getMealId());
-        mealProjectService.saveBatch(mealProjectList);
-        return ResultUtil.success();
-    }
-
     @RequestMapping(value ="/mealProject", method = RequestMethod.DELETE)
     public Object delete(MealProject mealProject){
         mealProjectDao.DeleteByMealId(mealProject.getMealId());
