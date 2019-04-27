@@ -8,6 +8,7 @@ import com.graduation.project.healthsys.bean.User;
 import com.graduation.project.healthsys.mapper.MealProjectDao;
 import com.graduation.project.healthsys.mapper.ProjectDao;
 import com.graduation.project.healthsys.service.IMealProjectService;
+import com.graduation.project.healthsys.service.IMealService;
 import com.graduation.project.healthsys.service.IProjectService;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class MealProjectController {
+
+    @Autowired
+    private IMealService mealService;
 
     @Autowired
     private IProjectService projectService;
@@ -63,7 +67,8 @@ public class MealProjectController {
 
     @RequestMapping(value ="/mealProject", method = RequestMethod.DELETE)
     public Object delete(MealProject mealProject){
-        mealProjectDao.DeleteByMealId(mealProject.getMealId());
+        mealProjectDao.DeleteByMealId(mealProject.getId());
+        mealService.removeById(mealProject.getId());
         return ResultUtil.success();
     }
 }

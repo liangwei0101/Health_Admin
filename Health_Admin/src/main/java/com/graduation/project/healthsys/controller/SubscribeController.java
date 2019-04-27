@@ -17,11 +17,16 @@ import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,38 +42,47 @@ public class SubscribeController {
 
   @Autowired
   private ISubscribeService subscribeService;
-  @RequestMapping(value = "/subscribe")
-  public Object subscribe(Map<String, Object> param) {
 
-    String idCard = ParamsUtils.stringParam(param, "idCard");
+  @RequestMapping(value = "/subscribe", method = RequestMethod.GET)
+  public Object getSubscribe()
+  {
+     List<Subscribe> subscribeList = subscribeService.list();
+     return ResultUtil.success(subscribeList);
+  }
 
-    String mealId = ParamsUtils.stringParam(param, "mealId");
-
-    String subscribeType = ParamsUtils.stringParam(param, "subscribeType");
-
-    String subscribeTimeStr = ParamsUtils.stringParam(param, "subscribeTime");
-
-    String branchNo = ParamsUtils.stringParam(param, "branchNo");
-
-    Date subscribeTime = DateUtils.stringToDate(subscribeTimeStr, "yyyy-MM-dd");
-
-    String serialNo = DateUtils.getNowDateTimeStr();
-
-
-    Subscribe subscribe = Subscribe.builder()
-        .id(IdWorker.getIdStr())
-        .idCard(idCard)
-        .mealId(mealId)
-        .subscribeType(subscribeType)
-        .branchNo(branchNo)
-        .subscribeTime(subscribeTime)
-        .serialNo(serialNo)
-        .build();
-
+  @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
+  public Object subscribe(@RequestBody Subscribe subscribe) throws ParseException {
+    subscribe.setId(IdWorker.getIdStr());
     subscribeService.save(subscribe);
+    Object aa =1;
+//    String idCard = ParamsUtils.stringParam(param, "idCard");
+//
+//    String mealId = ParamsUtils.stringParam(param, "mealId");
+//
+//    String subscribeType = ParamsUtils.stringParam(param, "subscribeType");
+//
+//    String subscribeTimeStr = ParamsUtils.stringParam(param, "subscribeTime");
+//
+//    String branchNo = ParamsUtils.stringParam(param, "branchNo");
 
-    Map<String, Object> result = new HashMap<>();
-    result.put("subscribe", subscribe);
-    return ResultUtil.success(result);
+//    Date subscribeTime = DateUtils.stringToDate(subscribeTimeStr, "yyyy-MM-dd");
+//
+//    String serialNo = DateUtils.getNowDateTimeStr();
+
+//
+//    Subscribe subscribe = Subscribe.builder()
+//        .id(IdWorker.getIdStr())
+//        .idCard(idCard)
+//        .mealId(mealId)
+//        .subscribeType(subscribeType)
+//        .branchNo(branchNo)
+//        .subscribeTime(subscribeTime)
+//        .build();
+//
+//    subscribeService.save(subscribe);
+
+//    Map<String, Object> result = new HashMap<>();
+//    result.put("subscribe", subscribe);
+    return ResultUtil.success(subscribe);
   }
 }

@@ -56,7 +56,7 @@ private static final long serialVersionUID=1L;
   /**
    * 预约id
    */
-  private String serialNo;
+  private int serialNo;
 
   /**
    * 套餐id
