@@ -10,6 +10,10 @@ package com.graduation.project.healthsys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.graduation.project.healthsys.bean.User;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * 功能说明:
@@ -19,4 +23,13 @@ import com.graduation.project.healthsys.bean.User;
  */
 public interface UserDao extends BaseMapper<User> {
 
+    /**
+     *  @Param 是参数的别名，在sql中可以动态获取的。
+     *
+     * @param userType
+     * @return
+     */
+
+    @Select("select * FROM user WHERE user_type = #{userType}")
+    List<User> getUserByUserType (@Param("userType")String userType);
 }

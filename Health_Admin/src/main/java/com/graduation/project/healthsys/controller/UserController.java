@@ -11,6 +11,7 @@ package com.graduation.project.healthsys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.graduation.project.healthsys.bean.User;
 import com.graduation.project.healthsys.exception.HtException;
+import com.graduation.project.healthsys.mapper.UserDao;
 import com.graduation.project.healthsys.service.IUserService;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,21 @@ import java.util.Objects;
 public class UserController {
 
   @Autowired
+  private UserDao userDao;
+
+  @Autowired
   private IUserService userService;
 
   @RequestMapping(value ="/user", method = RequestMethod.GET)
   public Object getUser(){
     return ResultUtil.success(userService.list());
+  }
+
+  @RequestMapping(value ="/user/{userType}", method = RequestMethod.GET)
+  public Object getUserByUserType(@PathVariable("userType") String userType){
+
+    Object aa =userDao.getUserByUserType(userType);
+    return ResultUtil.success(userDao.getUserByUserType(userType));
   }
 
   @RequestMapping(value ="/user", method = RequestMethod.POST)
