@@ -44,8 +44,6 @@ public class UserController {
 
   @RequestMapping(value ="/user/{userType}", method = RequestMethod.GET)
   public Object getUserByUserType(@PathVariable("userType") String userType){
-
-    Object aa =userDao.getUserByUserType(userType);
     return ResultUtil.success(userDao.getUserByUserType(userType));
   }
 

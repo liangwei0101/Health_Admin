@@ -18,6 +18,7 @@ import com.graduation.project.healthsys.service.IBranchService;
 import com.graduation.project.healthsys.util.ParamsUtils;
 import com.graduation.project.healthsys.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,13 @@ public class BranchController {
   @RequestMapping(value ="/branch", method = RequestMethod.GET)
   public Object get() {
     return ResultUtil.success(branchService.list());
+  }
+
+
+  @RequestMapping(value ="/branch/{branchNo}", method = RequestMethod.GET)
+  public Object getById(@PathVariable("branchNo") String branchNo) {
+      Object aa =branchService.getById(branchNo);
+    return ResultUtil.success(branchService.getById(branchNo));
   }
 
   @RequestMapping(value ="/branch", method = RequestMethod.POST)
