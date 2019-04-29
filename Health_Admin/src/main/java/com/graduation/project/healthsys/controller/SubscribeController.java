@@ -59,6 +59,4 @@ public class SubscribeController {
     subscribeService.save(subscribe);
     return ResultUtil.success(subscribe);
   }
-
-
 }
