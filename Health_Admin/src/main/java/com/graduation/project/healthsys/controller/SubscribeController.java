@@ -8,8 +8,18 @@
  */
 package com.graduation.project.healthsys.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.graduation.project.healthsys.bean.MealProject;
+import com.graduation.project.healthsys.bean.Project;
 import com.graduation.project.healthsys.bean.Subscribe;
+import com.graduation.project.healthsys.mapper.MealProjectDao;
+import com.graduation.project.healthsys.mapper.ProjectDao;
+import com.graduation.project.healthsys.mapper.SubscribeDao;
+import com.graduation.project.healthsys.service.IMealProjectService;
+import com.graduation.project.healthsys.service.IMealService;
+import com.graduation.project.healthsys.service.IProjectService;
 import com.graduation.project.healthsys.service.ISubscribeService;
 import com.graduation.project.healthsys.util.DateUtils;
 import com.graduation.project.healthsys.util.ParamsUtils;
@@ -21,10 +31,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 功能说明: 前端控制器
@@ -37,26 +45,47 @@ import java.util.Map;
 @RequestMapping("/api")
 public class SubscribeController {
 
-  @Autowired
-  private ISubscribeService subscribeService;
+    @Autowired
+    private ISubscribeService subscribeService;
 
-  @RequestMapping(value = "/subscribe", method = RequestMethod.GET)
-  public Object getSubscribe()
-  {
-     List<Subscribe> subscribeList = subscribeService.list();
-     return ResultUtil.success(subscribeList);
-  }
+    @Autowired
+    private SubscribeDao subscribeDao;
 
-  @RequestMapping(value = "/subscribe/{idCard}", method = RequestMethod.GET)
-  public Object getSubscribeDetail(@PathVariable("idCard") String idCard)
-  {
-    return null;
-  }
+    @Autowired
+    private IMealProjectService mealProjectService;
 
-  @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
-  public Object subscribe(@RequestBody Subscribe subscribe) throws ParseException {
-    subscribe.setId(IdWorker.getIdStr());
-    subscribeService.save(subscribe);
-    return ResultUtil.success(subscribe);
-  }
+    @Autowired
+    private ProjectDao projectDao;
+
+    @Autowired
+    private IProjectService projectService;
+
+    @RequestMapping(value = "/subscribe", method = RequestMethod.GET)
+    public Object getSubscribe() {
+        List<Subscribe> subscribeList = subscribeService.list();
+        return ResultUtil.success(subscribeList);
+    }
+
+    @RequestMapping(value = "/subscribe/{idCard}", method = RequestMethod.GET)
+    public Object getSubscribeDetail(@PathVariable("idCard") String idCard) {
+        List<Project> returnList =new ArrayList<>();
+
+        List<Subscribe> subscribe = subscribeDao.selectList(new QueryWrapper<Subscribe>().eq("id_card",idCard));
+        List<MealProject> mealProjectList = mealProjectService.list(new QueryWrapper<MealProject>().eq("meal_id", subscribe.get(0).getMealId()));
+        List<Project> projectList = projectService.list();
+
+        for (MealProject m:mealProjectList) {
+            List<Project>  tempList =  projectList.stream().filter((Project p) -> p.getId().equals(m.getProjectId())).collect(Collectors.toList());
+            returnList.add(tempList.get(0));
+        }
+
+        return ResultUtil.success(returnList);
+    }
+
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
+    public Object subscribe(@RequestBody Subscribe subscribe) throws ParseException {
+        subscribe.setId(IdWorker.getIdStr());
+        subscribeService.save(subscribe);
+        return ResultUtil.success(subscribe);
+    }
 }

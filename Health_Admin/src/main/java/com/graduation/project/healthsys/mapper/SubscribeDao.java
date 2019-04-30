@@ -11,7 +11,11 @@ package com.graduation.project.healthsys.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.graduation.project.healthsys.bean.Subscribe;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 功能说明:
@@ -21,4 +25,15 @@ import org.springframework.stereotype.Repository;
  */
 public interface SubscribeDao extends BaseMapper<Subscribe> {
 
+
+
+    /**
+     *  @Param 是参数的别名，在sql中可以动态获取的。
+     *
+     * @param idCard
+     * @return
+     */
+
+    @Select("select * subscribe WHERE id_card = #{idCard}")
+    List<Subscribe> SelectByIdCard (@Param("idCard")String idCard);
 }
