@@ -55,9 +55,6 @@ public class SubscribeController {
     private IMealProjectService mealProjectService;
 
     @Autowired
-    private ProjectDao projectDao;
-
-    @Autowired
     private IProjectService projectService;
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.GET)
