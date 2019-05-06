@@ -1,6 +1,5 @@
 package com.graduation.project.healthsys.bean;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,16 +12,14 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("meal")
-public class Project implements Serializable {
+@TableName("picture")
+public class Picture implements Serializable {
 
-    /**
-     *
-     */
-    @TableId
+    private static final long serialVersionUID=1L;
+
     private String id;
-    /**
-     *
-     */
-    private String name;
+
+    private String userId;
+
+    private String url;
 }

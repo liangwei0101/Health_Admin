@@ -1,6 +1,9 @@
 package com.graduation.project.healthsys.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.google.gson.Gson;
+import com.graduation.project.healthsys.bean.Picture;
+import com.graduation.project.healthsys.service.IPictureService;
 import com.qiniu.common.Zone;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
@@ -9,6 +12,7 @@ import com.qiniu.util.Auth;
 import com.sun.imageio.plugins.common.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.qiniu.common.QiniuException;
@@ -20,6 +24,9 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class QiniuService {
+
+    @Autowired
+    private IPictureService iPictureService;
 
     // 账号密钥，可在个人中心-密钥管理中查看
     private static final String ACCESS_KEY = "oxIuhvkHgIyhLGExyhouLfUrleJDcZtrOnNDmIl4";
@@ -46,26 +53,32 @@ public class QiniuService {
         return auth.uploadToken(BUCKET_NAME);
     }
 
-    public String Upload(MultipartFile image) {
-        DefaultPutRet putRet =new DefaultPutRet();
+    public void Upload(String userId, MultipartFile images[]) {
 
-        int dotPos = image.getOriginalFilename().lastIndexOf(".");
-        String imageExt = image.getOriginalFilename().substring(dotPos + 1).toLowerCase();
+        for (MultipartFile file: images) {
+            String path = "";
+            Picture picture = new Picture();
+            picture.setId(IdWorker.getIdStr());
+            picture.setUserId(userId);
 
-        String imageName = UUID.randomUUID().toString().replace("-", "") + "." + imageExt;
-        try {
-            Response response = uploadManager.put(image.getBytes(), imageName, getUpToken());
-            if (response.isOK() && response.isJson()) {
-                //解析上传成功的结果
-                putRet  = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-                return QINIU_IMAGE_DOMAIN + putRet.key;
+
+            DefaultPutRet putRet =new DefaultPutRet();
+            int dotPos = file.getOriginalFilename().lastIndexOf(".");
+            String imageExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();
+
+            String imageName = UUID.randomUUID().toString().replace("-", "") + "." + imageExt;
+            try {
+                Response response = uploadManager.put(file.getBytes(), imageName, getUpToken());
+                if (response.isOK() && response.isJson()) {
+                    //解析上传成功的结果
+                    putRet  = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                    path = QINIU_IMAGE_DOMAIN + putRet.key;
+                    picture.setUrl(path);
+                    iPictureService.save(picture);
+                }
+            } catch (IOException e) {
+
             }
-            log.error("七牛云上传图片失败：" + response.bodyString());
-        } catch (QiniuException e) {
-            log.error("七牛异常：" + e.getMessage());
-        } catch (IOException e) {
-            log.error("IO异常：" + e.getMessage());
         }
-        return QINIU_IMAGE_DOMAIN + putRet.key;
     }
 }
