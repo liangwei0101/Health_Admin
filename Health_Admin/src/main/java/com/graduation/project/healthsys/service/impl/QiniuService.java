@@ -22,15 +22,15 @@ import java.util.UUID;
 public class QiniuService {
 
     // 账号密钥，可在个人中心-密钥管理中查看
-    private static final String ACCESS_KEY = "TnIOszZVvneKT9xI9ySSiXpbpCsJeBGoFCUu6jTl";
+    private static final String ACCESS_KEY = "oxIuhvkHgIyhLGExyhouLfUrleJDcZtrOnNDmIl4";
 
-    private static final String SECRET_KEY = "1Mf5ksCyGwIzxTJoZ2zSUS65tS034t48G9nMQJV_";
+    private static final String SECRET_KEY = "5R1L7eQkddxgF20qshUAtGnPat5yDEFbpFq1COMo";
 
     // 要上传的空间
-    private static final String BUCKET_NAME = "hawk97";
+    private static final String BUCKET_NAME = "liangwei1994";
 
     // 七牛默认外链域名
-    private static final String QINIU_IMAGE_DOMAIN = "http://p44lruo4o.bkt.clouddn.com/";
+    private static final String QINIU_IMAGE_DOMAIN = "http://pqzg0sf82.bkt.clouddn.com/";
 
     // 密钥配置
     private Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
@@ -46,7 +46,7 @@ public class QiniuService {
         return auth.uploadToken(BUCKET_NAME);
     }
 
-    public String upload(MultipartFile image) {
+    public String Upload(MultipartFile image) {
         DefaultPutRet putRet =new DefaultPutRet();
 
         int dotPos = image.getOriginalFilename().lastIndexOf(".");
@@ -58,7 +58,7 @@ public class QiniuService {
             if (response.isOK() && response.isJson()) {
                 //解析上传成功的结果
                 putRet  = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-                return QINIU_IMAGE_DOMAIN + putRet;
+                return QINIU_IMAGE_DOMAIN + putRet.key;
             }
             log.error("七牛云上传图片失败：" + response.bodyString());
         } catch (QiniuException e) {
@@ -66,6 +66,6 @@ public class QiniuService {
         } catch (IOException e) {
             log.error("IO异常：" + e.getMessage());
         }
-        return putRet.key;
+        return QINIU_IMAGE_DOMAIN + putRet.key;
     }
 }
