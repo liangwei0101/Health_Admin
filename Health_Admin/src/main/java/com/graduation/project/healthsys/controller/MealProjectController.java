@@ -51,7 +51,10 @@ public class MealProjectController {
 
         for (MealProject m:mealProjectList) {
             List<Project>  tempList =  projectList.stream().filter((Project p) -> p.getId().equals(m.getProjectId())).collect(Collectors.toList());
-            ReturnProjectList.add(tempList.get(0));
+            if(!tempList.isEmpty()){
+                ReturnProjectList.add(tempList.get(0));
+            }
+
         }
         return ResultUtil.success(ReturnProjectList);
     }
