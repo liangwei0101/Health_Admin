@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("meal")
+@TableName("project")
 public class Project implements Serializable {
 
     /**

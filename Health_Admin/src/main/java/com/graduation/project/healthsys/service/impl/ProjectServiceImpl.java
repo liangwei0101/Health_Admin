@@ -7,7 +7,7 @@ import com.graduation.project.healthsys.service.IProjectService;
 import org.springframework.stereotype.Service;
 
 
-@Service("ProjectServiceImpl")
+@Service
 public class ProjectServiceImpl extends ServiceImpl<ProjectDao, Project> implements IProjectService {
 
 }

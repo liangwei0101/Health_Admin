@@ -73,7 +73,9 @@ public class SubscribeController {
 
         for (MealProject m:mealProjectList) {
             List<Project>  tempList =  projectList.stream().filter((Project p) -> p.getId().equals(m.getProjectId())).collect(Collectors.toList());
-            returnList.add(tempList.get(0));
+            if(!tempList.isEmpty()){
+                returnList.add(tempList.get(0));
+            }
         }
 
         return ResultUtil.success(returnList);
